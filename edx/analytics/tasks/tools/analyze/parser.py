@@ -4,15 +4,16 @@ import re
 
 class LogFileParser(object):
 
-    def __init__(self, log_file_obj, message_pattern, message_factory=dict, content_group_name='content'):
+    def __init__(self, log_file_obj, message_pattern, message_factory=dict, content_group_name='EMAIL'):
         self.log_file = log_file_obj
         self.message_pattern = message_pattern
         self.message_factory = message_factory
         self.content_group_name = content_group_name
-        self.line_number = 0
+        self.line_number = 1
         self.messages = self.parse_messages()
 
     def parse_messages(self):
+        message = self.log_file.readline()
         message = self.read_line()
         while message:
             message_match = re.match(self.message_pattern, message)
@@ -52,7 +53,11 @@ class LogFileParser(object):
         if line:
             self.line_number += 1
         return line
-
+    
+# def read_line(log_file):
+#         line = log_file.readline()
+#         return line
+    
     def next_message(self):
         try:
             return next(self.messages)
