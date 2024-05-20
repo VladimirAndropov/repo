@@ -1,5 +1,42 @@
 Open edX Data Pipeline
 ======================
+
+## Quick installation
+## Make a new virtualenv -- otherwise will have conflicts
+```
+sudo apt install python3-virtualenv
+
+cd /edx/app/hadoop/hadoop-2.7.2
+
+virtualenv --python=/usr/bin/python2.7 pipeline
+
+
+. pipeline/bin/activate
+```
+## Check out pipeline
+```
+
+git clone https://github.com/VladimirAndropov/repo
+
+cd repo
+make bootstrap
+
+```
+## HACK: make ansible do this
+```
+cat <<EOF > /edx/etc/edx-analytics-pipeline/input.json
+{"username": $DB_USERNAME, "host": $DB_HOST, "password": $DB_PASSWORD, "port": $DB_PORT}
+EOF
+``` 
+
+# Run the pipeline
+## Ensure you're in the pipeline virtualenv
+```
+remote-task --host localhost --repo https://github.com/edx/edx-analytics-pipeline --user ubuntu --override-config $HOME/edx-analytics-pipeline/config/devstack.cfg --wheel-url http://edx-wheelhouse.s3-website-us-east-1.amazonaws.com/Ubuntu/precise --remote-name analyticstack --wait TotalEventsDailyTask --interval 2016 --output-root hdfs://localhost:9000/output/ --local-scheduler
+```
+If you got this far without error, you should try running the real pipeline tasks listed/linked below
+
+____________________
 A data pipeline for analyzing Open edX data. This is a batch analysis engine that is capable of running complex data processing workflows.
 
 The data pipeline takes large amounts of raw data, analyzes it and produces higher value outputs that are used by various downstream tools.
