@@ -1,0 +1,10 @@
+version: "3"
+services:
+  analytics_pipeline:
+    image: edxops/analytics_pipeline:latest
+    ports:
+      - "8082:8082"
+      - "8083:8083"
+    volumes:
+      - /edx/app/hadoop/repo:/edx/app/analytics_pipeline/analytics_pipeline
+
